@@ -1,0 +1,146 @@
+
+<style>
+  .wrap { padding: 1.5rem 1rem 1rem; font-family: var(--font-sans); }
+  .legend { display: flex; gap: 20px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .leg { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--color-text-secondary); }
+  .dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 1.5rem; }
+  .card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.75rem 1rem; }
+  .card-label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; }
+  .card-val { font-size: 22px; font-weight: 500; color: #1D9E75; }
+  .card-sub { font-size: 11px; color: var(--color-text-tertiary); margin-top: 2px; }
+</style>
+<div class="wrap">
+  <div class="legend">
+    <span class="leg"><span class="dot" style="background:#E24B4A"></span>Read full file</span>
+    <span class="leg"><span class="dot" style="background:#EF9F27"></span>Rough estimate</span>
+    <span class="leg"><span class="dot" style="background:#1D9E75"></span>line-locator</span>
+  </div>
+  <div style="position:relative;width:100%;height:320px;">
+    <canvas id="bc"></canvas>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-label">500-line file</div>
+      <div class="card-val">83%</div>
+      <div class="card-sub">50 lines vs 300 baseline</div>
+    </div>
+    <div class="card">
+      <div class="card-label">1 500-line file</div>
+      <div class="card-val">95%</div>
+      <div class="card-sub">70 lines vs 1 500 baseline</div>
+    </div>
+    <div class="card">
+      <div class="card-label">5 000-line file</div>
+      <div class="card-val">98%</div>
+      <div class="card-sub">90 lines vs 5 000 baseline</div>
+    </div>
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const isDark = matchMedia('(prefers-color-scheme: dark)').matches;
+const gridColor  = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.06)';
+const labelColor = isDark ? '#9b9b93' : '#888780';
+const full = [500, 1500, 5000];
+
+const tooltipPlugin = {
+  id: 'customTooltip',
+  afterDraw(chart) {
+    const {ctx, tooltip} = chart;
+    if (!tooltip || tooltip.opacity === 0) return;
+    const {caretX: x, caretY: y} = tooltip;
+    const lines = tooltip.dataPoints;
+    if (!lines || lines.length === 0) return;
+
+    const pad = 12, lineH = 20, headerH = 24;
+    const rows = lines.map(p => {
+      const pct = Math.round((1 - p.raw / full[p.dataIndex]) * 100);
+      const saved = full[p.dataIndex] - p.raw;
+      return {
+        color: p.dataset.backgroundColor,
+        label: p.dataset.label,
+        lines: p.raw.toLocaleString(),
+        tag: p.datasetIndex === 0 ? 'baseline' : `saves ${saved.toLocaleString()} lines (-${pct}%)`
+      };
+    });
+
+    const w = 240, h = headerH + rows.length * lineH + pad * 2;
+    let tx = x + 12, ty = y - h / 2;
+    if (tx + w > chart.width) tx = x - w - 12;
+    if (ty < 4) ty = 4;
+    if (ty + h > chart.height) ty = chart.height - h - 4;
+
+    ctx.save();
+    ctx.shadowColor = 'rgba(0,0,0,0.18)';
+    ctx.shadowBlur = 12;
+    ctx.fillStyle = isDark ? '#2C2C2A' : '#ffffff';
+    ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
+    ctx.lineWidth = 0.5;
+    const r = 8;
+    ctx.beginPath();
+    ctx.moveTo(tx+r,ty); ctx.lineTo(tx+w-r,ty); ctx.arcTo(tx+w,ty,tx+w,ty+r,r);
+    ctx.lineTo(tx+w,ty+h-r); ctx.arcTo(tx+w,ty+h,tx+w-r,ty+h,r);
+    ctx.lineTo(tx+r,ty+h); ctx.arcTo(tx,ty+h,tx,ty+h-r,r);
+    ctx.lineTo(tx,ty+r); ctx.arcTo(tx,ty,tx+r,ty,r);
+    ctx.closePath();
+    ctx.fill(); ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    const fileLabels = ['500-line file','1 500-line file','5 000-line file'];
+    ctx.fillStyle = isDark ? '#D3D1C7' : '#444441';
+    ctx.font = '500 12px system-ui, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(fileLabels[lines[0].dataIndex], tx+pad, ty+pad+12);
+
+    rows.forEach((row, i) => {
+      const ry = ty + headerH + pad + i * lineH;
+      ctx.fillStyle = row.color;
+      ctx.fillRect(tx+pad, ry+2, 8, 8);
+      ctx.fillStyle = isDark ? '#D3D1C7' : '#2C2C2A';
+      ctx.font = '400 12px system-ui, sans-serif';
+      ctx.fillText(row.label, tx+pad+14, ry+11);
+      ctx.fillStyle = isDark ? '#888780' : '#5F5E5A';
+      ctx.font = '400 11px system-ui, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText(row.lines + ' lines', tx+w-pad, ry+11);
+      ctx.textAlign = 'left';
+      if (row.tag !== 'baseline') {
+        ctx.fillStyle = '#1D9E75';
+        ctx.font = '400 10px system-ui, sans-serif';
+        ctx.fillText(row.tag, tx+pad+14, ry+22);
+      }
+    });
+    ctx.restore();
+  }
+};
+
+new Chart(document.getElementById('bc'), {
+  type: 'bar',
+  data: {
+    labels: ['500-line file', '1 500-line file', '5 000-line file'],
+    datasets: [
+      { label: 'Read full file', data: [500,1500,5000], backgroundColor:'#E24B4A', borderRadius:4, borderSkipped:false },
+      { label: 'Rough estimate', data: [300,500,900],   backgroundColor:'#EF9F27', borderRadius:4, borderSkipped:false },
+      { label: 'line-locator',   data: [50,70,90],      backgroundColor:'#1D9E75', borderRadius:4, borderSkipped:false }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: { enabled: false }
+    },
+    scales: {
+      x: { grid:{display:false}, ticks:{color:labelColor, font:{size:12}} },
+      y: {
+        grid: { color: gridColor },
+        ticks: { color:labelColor, font:{size:12}, callback: v => v>=1000 ? (v/1000).toFixed(1)+'k' : v },
+        title: { display:true, text:'Lines consumed', color:labelColor, font:{size:12} }
+      }
+    }
+  },
+  plugins: [tooltipPlugin]
+});
+</script>

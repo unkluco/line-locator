@@ -1,12 +1,6 @@
 <div align="center">
 
-<!-- ============================================================ -->
-<!-- BANNER IMAGE                                                  -->
-<!-- Suggested: A dark-background banner showing a terminal with  -->
-<!-- the two-step workflow: findtree → findtool → view_range      -->
-<!-- Size: 1280×400px, style: minimal/hacker                      -->
-<!-- [ADD BANNER IMAGE HERE]                                       -->
-<!-- ============================================================ -->
+![Banner](assets/banner.png)
 
 # 🔍 line-locator
 
@@ -48,21 +42,21 @@ line-locator gives Claude a **surgical locate-then-read** workflow instead of br
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                     line-locator workflow                        │
-│                                                                  │
+│                     line-locator workflow                       │
+│                                                                 │
 │   "Find validateToken   ┌──────────────┐   Which files?         │
 │    and read it."   ───► │  findtree.py │ ──────────────────►    │
 │                         │  (folder)    │   auth/service.py      │
 │                         └──────────────┘        │               │
-│                                                  ▼               │
+│                                                 ▼               │
 │                         ┌──────────────┐   Line 312 (def)       │
 │                         │  findtool.py │ ◄──────────────────    │
 │                         │  (file)      │   Line 313 ({)         │
 │                         └──────────────┘   Line 389 (})         │
-│                                  │                               │
-│                                  ▼                               │
-│                         view_range [310, 389]                    │
-│                         (only 80 lines, not 800)                 │
+│                                 │                               │
+│                                 ▼                               │
+│                        view_range [310, 389]                    │
+│                        (only 80 lines, not 800)                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -87,13 +81,11 @@ view with rough estimate          200          █████  25%
 line-locator (this skill)          80          ██  10%
 ```
 
-<!-- ============================================================ -->
-<!-- BENCHMARK CHART IMAGE                                         -->
-<!-- Suggested: Bar chart comparing the three methods above.      -->
-<!-- Colors: red for full-file, yellow for estimate, green for    -->
-<!-- line-locator. Include actual token numbers if possible.       -->
-<!-- [ADD BENCHMARK CHART HERE]                                   -->
-<!-- ============================================================ -->
+
+
+<iframe src="assets/benchmark_chart.html" width="100%" height="500" frameborder="0" style="border-radius: 8px;"></iframe>
+
+
 
 Savings scale with file size. On a 3000-line service file:
 
