@@ -73,18 +73,8 @@ Two scripts. One purpose: **locate before you read.**
 
 Token consumption on a real-world 800-line `AuthService` with a 50-line target function:
 
-```
-Method                          Lines read    Relative cost
-──────────────────────────────────────────────────────────
-view full file                    800          ████████████████████  100%
-view with rough estimate          200          █████  25%
-line-locator (this skill)          80          ██  10%
-```
-
-
 
 ![Benchmark](assets/benchmark_chart.svg)
-
 
 
 Savings scale with file size. On a 3000-line service file:
@@ -198,14 +188,7 @@ python findtool.py --file app.py -c "{" 248 1
 # view_range [247, 298]  ← only read what you need
 ```
 
-<!-- ============================================================ -->
-<!-- TERMINAL DEMO GIF / SCREENSHOT                               -->
-<!-- Suggested: A side-by-side terminal recording showing:        -->
-<!--   LEFT:  Claude doing view_range on a 600-line file          -->
-<!--   RIGHT: Claude using findtool to pin down 40 lines          -->
-<!-- Tool: asciinema + svg-term, or a clean screenshot collage    -->
-<!-- [ADD DEMO GIF HERE]                                          -->
-<!-- ============================================================ -->
+![demo](./assets/demo.gif)
 
 ---
 
