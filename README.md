@@ -83,7 +83,7 @@ line-locator (this skill)          80          ██  10%
 
 
 
-<iframe src="assets/benchmark_chart.html" width="100%" height="500" frameborder="0" style="border-radius: 8px;"></iframe>
+![Benchmark](assets/benchmark_chart.svg)
 
 
 
