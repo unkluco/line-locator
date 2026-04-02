@@ -1,12 +1,6 @@
 <div align="center">
 
-<!-- ============================================================ -->
-<!-- BANNER IMAGE                                                  -->
-<!-- Suggested: A dark-background banner showing a terminal with  -->
-<!-- the two-step workflow: findtree → findtool → view_range      -->
-<!-- Size: 1280×400px, style: minimal/hacker                      -->
-<!-- [ADD BANNER IMAGE HERE]                                       -->
-<!-- ============================================================ -->
+![Banner](assets/banner.png)
 
 # 🔍 line-locator
 
