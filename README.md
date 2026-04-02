@@ -221,13 +221,7 @@ python findtool.py --file auth/service.py -c "{" 313 1
 view_range [310, 389]   # 80 lines instead of 800
 ```
 
-<!-- ============================================================ -->
-<!-- WORKFLOW DIAGRAM IMAGE                                        -->
-<!-- Suggested: A clean step-by-step visual of the 6 steps above  -->
-<!-- with arrows, line numbers, and a mini code snippet preview   -->
-<!-- at each step. Light/dark mode variants appreciated.          -->
-<!-- [ADD WORKFLOW DIAGRAM HERE]                                  -->
-<!-- ============================================================ -->
+![workflow](./assets/workflow.png)
 
 ---
 
