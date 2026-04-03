@@ -102,15 +102,19 @@ Savings scale with file size. On a 3000-line service file:
 
 ### 1. Install the skill
 
-```bash
-git clone https://github.com/unkluco/line-locator.git
-```
-
-Add to your Claude skill path (typically `~/.claude/skills/`):
+Win
 
 ```bash
-cp -r line-locator ~/.claude/skills/
+git clone https://github.com/unkluco/line-locator.git C:\Users\ADMIN\.claude\skills\line-locator
 ```
+
+Linux/Mac
+
+```bash
+git clone https://github.com/unkluco/line-locator.git ~/.claude/skills/line-locator
+```
+
+Or by .zip in Releases
 
 ### 2. Verify the scripts work
 
