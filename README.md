@@ -2,7 +2,7 @@
 
 ![Banner](assets/banner.png)
 
-# 🔍 line-locator
+# 🔍 Line Locator
 
 **A Claude skill that teaches your agent to navigate code like a senior dev — not a first-day intern.**
 
