@@ -5,7 +5,7 @@ description: >
 author: Kluco
 github: unkluco
 email: huylet334@gmail.com
-version: 3.0
+version: 1.1.0
 ---
 
 # Line-Locator
